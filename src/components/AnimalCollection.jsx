@@ -4,31 +4,47 @@ import AnimalForm from './AnimalForm'
 
 function AnimalCollection() {
 
-
     // STATE //
+    const [ animals , setAnimals ] = useState([])
 
-    const [animals, setAnimals] = useState([])
-
+    
 
     // EFFECTS //
-
     useEffect(() => {
         fetch('http://localhost:3000/animals')
-        .then( response => response.json() )
+        .then( r => r.json() )
         .then( fetchedData => setAnimals(fetchedData) )
     }, [])
 
-
     // CALLBACK FUNCTIONS //
 
-    /* We'll add some callback functions here */
+   function addAnimal ( newAnimal ) {
+        setAnimals([ ...setAnimals , newAnimal ])
+   }
+
+   function editAnimal ( editedAnimal ) {
+        const mappedArray = animals.map( anima => {
+            if (animals.id === editedAnimal.id ) { 
+                return editedAnimal
+            } else {
+                return animals
+        }
+    })
+    setAnimals( mappedArray )
+
+   }
+
+    function releaseAnimal (deleteAnimal) {
+        const filteredArray = animals.filter( animal => animal.id !== deleteAnimal.id )
+
+        setAnimals(filteredArray)
+   }
 
 
     // RENDER //
-
     return (
         <>
-            <AnimalForm />
+            <AnimalForm addAnimal={addAnimal}/>
 
             <h2>Our Zoo Animals</h2>
 

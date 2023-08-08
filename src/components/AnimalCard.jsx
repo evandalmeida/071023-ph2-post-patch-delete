@@ -1,15 +1,32 @@
-function AnimalCard({ animal }) {
-
+export default function AnimalCard({ animal , editAnimal , releaseAnimal }) {
 
     // EVENTS //
-
     function handleChangeEndangered(event) {
-      console.log("Attempting to change endangered")
+      // PATCH REQUEST
+      const OPTIONS ={
+        method : "PATCH",
+        headers : {
+            "Accept" : "application.json",
+            "Content-Type" : "application.json" },
+        body : JSON.stringify({ endangered: !animal.endangered })
+        }
+
+        fetch(`http://localhost:3000/animals/${animal.id}` , OPTIONS )
+        .then(r => r.json())
+        .then( editAnimal )
+
+      }
+    
+    function handleRelease () {
+        const OPTIONS ={method : "DELETE"}
+
+        fetch(`http://localhost:3000/animals/${animal.id}` , OPTIONS )
+        .then(r => r.json())
+        .then(() => releaseAnimal( animal ) )
+
     }
 
-
     // RENDER //
-
     return (
         <div className="animal-card">
 
@@ -28,6 +45,4 @@ function AnimalCard({ animal }) {
         </div>
     )
 
-}
-
-export default AnimalCard
+};

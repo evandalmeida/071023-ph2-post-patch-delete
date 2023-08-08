@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
-function AnimalForm() {
-
+export default function AnimalForm( {addAnimal} ) {
 
     // STATE //
 
@@ -13,29 +12,43 @@ function AnimalForm() {
     // EVENTS //
 
     const handleChangeName = (event) => setName(event.target.value)
-
     const handleChangeSpecies = (event) => setSpecies(event.target.value)
-
     const toggleEndangered = () => setEndangered(!endangered)
 
     function handleSubmitAnimal(e) {
         e.preventDefault()
-
+        
+        const OPTIONS = {
+                method: "POST",
+                headers: {
+                    "Accept" : "application.json",
+                    "Content-Type" : "application.json" },
+                body: JSON.stringify({ name , species , endangered })
+        };
+        
+        fetch('http://localhost:3000/animals' , OPTIONS)
+        .then(r => r.json())
+        .then( addAnimal )
+        
         resetForm()
     }
 
 
-    // HELPER FUNCTIONS //
 
+
+    
+    
+    // HELPER FUNCTIONS //
+    
     function resetForm() {
         setName('')
         setSpecies('')
         setEndangered(false)
     }
-
-
+    
+    
     // RENDER //
-
+    
     return (
         <form className="animal-form" onSubmit={ handleSubmitAnimal }>
 
@@ -54,7 +67,6 @@ function AnimalForm() {
 
         </form>
     )
-
+    
 }
 
-export default AnimalForm
